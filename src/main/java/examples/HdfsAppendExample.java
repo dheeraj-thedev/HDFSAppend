@@ -53,19 +53,35 @@ public class HdfsAppendExample {
         Boolean flag = Boolean.valueOf(fileSystem.getConf().get("dfs.support.append"));
         System.out.println("flag append : " + flag);
 
-        if (flag) {
-            FSDataOutputStream fsout = fileSystem.create(dest, true);
-            // wrap the outputstream with a writer
-            PrintWriter writer = new PrintWriter(fsout);
+//        if (flag) {
+////            FSDataOutputStream fsout = fileSystem.create(dest, true);
+////            // wrap the outputstream with a writer
+////            PrintWriter writer = new PrintWriter(fsout);
+////            writer.append(content);
+//
+//
+////            writer.flush();
+////            //   writer.write(content);
+////            fsout.hflush();
+////            writer.close();
+////            fsout.close();
+//        } else {
+//            System.err.println("please set the dfs.support.append to be true");
+//        }
+     //   fileSystem.close();
+
+        if(flag) {
+            FSDataOutputStream fsappend = fileSystem.append(dest);
+            PrintWriter writer = new PrintWriter(fsappend);
             writer.append(content);
-            //   writer.write(content);
-            fsout.hflush();
+            writer.flush();
+            fsappend.hflush();
             writer.close();
-            fsout.close();
-        } else {
+            fsappend.close();
+        }
+        else {
             System.err.println("please set the dfs.support.append to be true");
         }
-     //   fileSystem.close();
     }
 
     public void readFromHDFS(FileSystem fileSystem, String hdfsStorePath, String localFilePath) {
